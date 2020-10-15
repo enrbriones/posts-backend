@@ -42,8 +42,11 @@ const addPost =  async (req, res=response) => {
 const deletePost =  async (req, res=response) => {
     const postId = req.params.id
     try {
-        const result = await db.query('DELETE FROM posts WHERE id=$1',[postId])
-        res.json({ok:true})
+        const result = await db.query('DELETE FROM posts WHERE id=$1 RETURNING *',[postId])
+        res.json({
+            ok:true,
+            post: result.rows
+        })
  
       } catch (err) {
         console.log(err.stack)
